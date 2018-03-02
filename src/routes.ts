@@ -5,6 +5,7 @@ import analyse from './ui/analyse'
 import challenge from './ui/challenge'
 import tv from './ui/tv'
 import correspondence from './ui/correspondence'
+import gameslobby from './ui/gameslobby'
 import otb from './ui/otb'
 import ai from './ui/ai'
 import settingsUi from './ui/settings'
@@ -60,6 +61,7 @@ export default {
       'challenge/:id': challenge,
       'tv': tv,
       'tv/:channel': tv,
+      'gameslobby': gameslobby,
       'correspondence': correspondence,
       '@/:id': user,
       '@/:id/following': userFollowing,

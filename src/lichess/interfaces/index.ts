@@ -68,6 +68,31 @@ export interface CorrespondenceSeek {
   }
 }
 
+export enum SpeedId {
+  UltraBullet = 0,    // Insanely fast games: less than 30 seconds
+  Bullet = 1,         // Very fast games: less than 3 minutes
+  Blitz = 2,          // Fast games: 3 to 8 minutes
+  Rapid = 5,          // Rapid games: 8 to 25 minutes
+  Classical = 3,      // Classical games: 25 minutes and more
+  Correspondence = 4, // Correspondence games
+}
+
+export interface GamesLobbyHook {
+  readonly id: string           // Game ID
+  readonly uid: string          // User ID
+  readonly clock: string
+  readonly c?: Color
+  readonly t: number            // Estimated game duration
+  readonly s: SpeedId           // Game speed category ID
+  readonly u?: string           // User name
+  readonly rating?: number      // User rating
+  readonly ra?: number          // Rated if present
+  readonly perf: string         // Perf name
+  readonly prov?: boolean       // User has provisional rating
+  readonly variant?: VariantKey // Game variant if not standard chess
+  removed?: boolean              // Has hook been removed
+}
+
 export interface PongMessage {
   readonly d: number
   readonly r: number

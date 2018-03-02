@@ -164,6 +164,11 @@ function renderLinks(user?: Session) {
         <span className="fa fa-cogs"/>{i18n('playWithTheMachine')}
       </li> : null
       }
+      {hasNetwork() ?
+      <li className="side_link" key="gameslobby" data-route="/gameslobby">
+        <span className="fa fa-handshake-o" />{i18n('lobby')}
+      </li> : null
+      }
       {hasNetwork() && user ?
       <li className="side_link" key="correspondence" data-route="/correspondence">
         <span className="fa fa-paper-plane" />{i18n('correspondence')}
