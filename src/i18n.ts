@@ -4,12 +4,22 @@ import { loadLocalJsonFile } from './utils'
 const defaultCode = 'en'
 
 let lang = defaultCode
-let messages = {} as StringMap
+let messages = {} as Translation
 
+/**
+ * @param key key of the translation string
+ * @param args arguments for the translation string '%s' will be replaced by these values.
+ *             in case of plurals, the first argument indicates the quantity and won't be replaced in the text
+ */
 export default function i18n(key: string, ...args: Array<string | number>): string {
-  let str: string = messages[key] || untranslated[key] || key
-  args.forEach(a => { str = str.replace('%s', String(a)) })
-  return str
+  let str: (string | Plural) = messages[key] || untranslated[key] || key
+  if (typeof(str) === 'object') {
+    let count = args.length > 0 && typeof(args[0]) === 'number' ? args[0] : 0
+    str = count === 1 ? str.one : str.other
+    args.shift()
+  }
+  args.forEach(a => { str = (str as string).replace('%s', String(a)) })
+  return (str as string)
 }
 
 export function getLang(): string {

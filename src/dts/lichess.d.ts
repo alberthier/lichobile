@@ -3,6 +3,13 @@ declare type Seconds = number
 declare type Centis = number
 declare type Millis = number
 
+interface Plural {
+  one: string
+  other: string
+}
+declare type Translation = {
+  [i: string]: string | Plural | undefined
+}
 declare type StringMap = {
   [i: string]: string | undefined
 }
