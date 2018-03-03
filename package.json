@@ -30,6 +30,8 @@
         "babel-preset-env": "1.6.1",
         "babelify": "8.0.0",
         "browserify": "14.5.0",
+        "concat-stream": "1.6.1",
+        "follow-redirects": "1.4.1",
         "gulp": "3.9.1",
         "gulp-autoprefixer": "3.1.1",
         "gulp-preprocess": "2.0.0",
@@ -44,9 +46,11 @@
         "tsify": "3.0.4",
         "tslint": "5.8.0",
         "typescript": "2.6.2",
+        "unzip-stream": "0.3.0",
         "vinyl-buffer": "1.0.0",
         "vinyl-source-stream": "1.1.0",
-        "watchify": "3.9.0"
+        "watchify": "3.9.0",
+        "xml2js": "0.4.19"
     },
     "dependencies": {
         "@types/d3": "4.5.0",

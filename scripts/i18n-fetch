@@ -1,17 +1,45 @@
-#!/bin/sh
+#!/usr/bin/env node
 
-dir=www/i18n
-mkdir -p $dir
+let https = require('follow-redirects').https;
+let unzip = require('unzip-stream');
+let concat = require('concat-stream')
+let xml2js = require('xml2js');
+let fs = require('fs');
 
-HOST=${1:-http://lichess1.org}
+const OUTPUT_DIR = __dirname + '/../www/i18n/';
 
-for lang in en fr ru de tr sr lv bs da es ro it fi uk pt pl nl vi sv cs sk hu ca sl az nn eo tp el fp lt nb et hy af hi ar zh gl hr mk id ja bg th fa he mr mn cy gd ga sq be ka sw ps is kk io gu fo eu bn id la jv ky pi as le ta sa ml kn ko mg kb zu ur yo tl fy jb tg cv ia tc; do
-  url="$HOST/assets/trans/$lang.all.json"
-  echo $url;
-  curl -s -o "$dir/$lang.json" $url
-done
+https.get('https://crowdin.com/download/project/lichess.zip', function (response) {
+  response.pipe(unzip.Parse())
+  .on('entry', function (entry) {
+    if (entry.type === 'File' && entry.path.startsWith('master/translation/dest/site/')) {
+      let lang = entry.path.substr(29, 2);
+      entry.pipe(concat(function (buffer) {
+        xml2js.parseString(buffer.toString('utf-8'), function(err, result) {
+          if (!err) {
+            json = {};
+            if (result.resources.string) {
+              for (let tr of result.resources.string) {
+                json[tr.$.name] = tr._;
+              }
+            }
+            if (result.resources.plurals) {
+              for (let tr of result.resources.plurals) {
+                plural = {};
+                for (let item of tr.item) {
+                  plural[item.$.quantity] = item._;
+                }
+                json[tr.$.name] = plural;
+              }
+            }
+            fs.writeFileSync(OUTPUT_DIR + lang + '.json', JSON.stringify(json));
+          }
+        });
+      }))
+    } else {
+      entry.autodrain();
+    }
+  })
+}).on('error', function (err) {
+  console.error(err);
+});
 
-echo "References"
-curl -s -o "$dir/refs.json" "$HOST/assets/trans/refs.json"
-
-echo "Done"
